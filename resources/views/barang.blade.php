@@ -41,8 +41,8 @@
                         <td>{{ $item->id_barang }}</td>
                         <td>{{ $item->jenis }}</td>
                         <td class="editable" data-field="nama" data-id="{{ $item->id_barang }}">{{ $item->nama }}</td>
-                        <td>{{ $item->satuan_name }}</td>
-                        <td>{{ $item->harga }}</td>
+                        <td class="editable" data-field="satuan" data-id="{{ $item->id_barang }}">{{ $item->satuan_name }}</td>
+                        <td class="editable" data-field="harga" data-id="{{ $item->id_barang }}">{{ $item->harga }}</td>
                         <td>
                             @if($item->STATUS == 1)
                                 Active
@@ -69,13 +69,23 @@
         <!-- Edit Item Modal -->
         <div id="editItemModal" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
+                <span class="close" id="closeEditModal">&times;</span>
                 <form id="editItemForm" method="POST">
                     @csrf
                     @method('PUT')
                     <label for="edit_nama">Item Name:</label>
                     <input type="text" id="edit_nama" name="nama" required>
-                    <!-- Add other fields as needed -->
+
+                    <!-- Add fields for editing unit and price -->
+                    <label for="edit_id_satuan">Select Unit:</label>
+                    <select id="edit_id_satuan" name="id_satuan" required>
+                        @foreach($units as $unit)
+                            <option value="{{ $unit->id_satuan }}">{{ $unit->nama_satuan }}</option>
+                        @endforeach
+                    </select>
+                    <label for="edit_harga">Edit Item Price:</label>
+                    <input type="number" id="edit_harga" name="harga" required>
+
                     <button type="submit">Update</button>
                 </form>
             </div>
@@ -89,13 +99,20 @@
         const editItemModal = document.getElementById('editItemModal');
         const editItemForm = document.getElementById('editItemForm');
         const editNamaInput = document.getElementById('edit_nama');
+        const editIdSatuanInput = document.getElementById('edit_id_satuan');
+        const editHargaInput = document.getElementById('edit_harga');
 
         itemTable.addEventListener('click', function (event) {
             if (event.target.classList.contains('edit-btn')) {
                 const itemId = event.target.dataset.id;
                 const itemName = document.querySelector(`[data-id="${itemId}"][data-field="nama"]`).innerText;
+                const itemSatuan = document.querySelector(`[data-id="${itemId}"][data-field="satuan"]`).innerText;
+                const itemHarga = document.querySelector(`[data-id="${itemId}"][data-field="harga"]`).innerText;
 
                 editNamaInput.value = itemName;
+                editIdSatuanInput.value = itemSatuan;
+                editHargaInput.value = itemHarga;
+
                 editItemForm.action = `/items/${itemId}`;
                 editItemModal.style.display = 'block';
             }
@@ -113,7 +130,7 @@
             }
         });
 
-        editItemModal.querySelector('.close').addEventListener('click', function () {
+        editItemModal.querySelector('#closeEditModal').addEventListener('click', function () {
             editItemModal.style.display = 'none';
         });
 

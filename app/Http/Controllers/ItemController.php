@@ -57,12 +57,15 @@ class ItemController extends Controller
     {
         $this->validate($request, [
             'nama' => 'required|string|max:45',
-            // Add other validation rules as needed
+            'id_satuan' => 'required|exists:satuan,id_satuan',
+            'harga' => 'required|integer',
+        
         ]);
 
         DB::table('barang')->where('id_barang', $id)->update([
             'nama' => $request->nama,
-            // Update other fields as needed
+            'id_satuan' => $request->id_satuan,
+            'harga' => $request->harga,
         ]);
 
         return redirect()->route('items.index');
