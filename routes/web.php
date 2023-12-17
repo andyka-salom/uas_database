@@ -71,3 +71,12 @@ Route::post('/items', [ItemController::class, 'store'])->name('items.store');
 Route::put('/items/{id}', [ItemController::class, 'update'])->name('items.update');
 Route::post('/items/{id}/activate', [ItemController::class, 'activate'])->name('items.activate');
 Route::delete('/items/{id}', [ItemController::class, 'destroy'])->name('items.destroy');
+
+// routes/web.php
+
+use App\Http\Controllers\PengadaanController;
+
+Route::get('/pengadaan', [PengadaanController::class, 'index'])->name('pengadaan.index');
+Route::get('/get-procurement-details/{procurementID}', [PengadaanController::class, 'getProcurementDetails']);
+Route::get('/change-procurement-status/{procurementID}', [PengadaanController::class, 'changeProcurementStatus']);
+Route::post('/tambah-pengadaan', [PengadaanController::class, 'tambahPengadaan'])->name('tambah.pengadaan');
