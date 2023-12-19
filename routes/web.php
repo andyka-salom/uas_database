@@ -77,6 +77,13 @@ Route::delete('/items/{id}', [ItemController::class, 'destroy'])->name('items.de
 use App\Http\Controllers\PengadaanController;
 
 Route::get('/pengadaan', [PengadaanController::class, 'index'])->name('pengadaan.index');
-Route::get('/get-procurement-details/{procurementID}', [PengadaanController::class, 'getProcurementDetails']);
-Route::get('/change-procurement-status/{procurementID}', [PengadaanController::class, 'changeProcurementStatus']);
-Route::post('/tambah-pengadaan', [PengadaanController::class, 'tambahPengadaan'])->name('tambah.pengadaan');
+Route::get('/api/calculateTotalPengadaan', [PengadaanController::class, 'calculateTotalPengadaan']);
+Route::post('/api/createPengadaan', [PengadaanController::class, 'createPengadaan']);
+
+use App\Http\Controllers\MarginPenjualanController;
+
+Route::get('/margin_penjualan', [MarginPenjualanController::class, 'index'])->name('margin_penjualan.index');
+Route::post('/margin_penjualan', [MarginPenjualanController::class, 'store'])->name('margin_penjualan.store');
+Route::put('/margin_penjualan/{id}', [MarginPenjualanController::class, 'update'])->name('margin_penjualan.update');
+Route::post('/margin_penjualan/activate/{id}', [MarginPenjualanController::class, 'activate'])->name('margin_penjualan.activate');
+Route::delete('/margin_penjualan/{id}', [MarginPenjualanController::class, 'destroy'])->name('margin_penjualan.destroy');

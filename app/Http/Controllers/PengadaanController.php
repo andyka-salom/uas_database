@@ -1,4 +1,5 @@
 <?php
+// app/Http/Controllers/PengadaanController.php
 
 namespace App\Http\Controllers;
 
@@ -9,49 +10,51 @@ class PengadaanController extends Controller
 {
     public function index()
     {
-        // Fetch pengadaan details with JOIN
         $pengadaanDetails = DB::table('ViewProcurementDetails')->get();
-
-        // Fetch vendor and barang data for the form
-        $vendors = DB::table('vendor')->get();
+    
         $barangs = DB::table('barang')->get();
-
-        return view('pengadaan', compact('pengadaanDetails', 'vendors', 'barangs'));
+    
+        $vendors = DB::table('vendor')->get();
+    
+        return view('pengadaan', [
+            'pengadaanDetails' => $pengadaanDetails,
+            'barangs' => $barangs,
+            'vendors' => $vendors,
+        ]);
     }
-
-
-    public function tambahPengadaan(Request $request)
+    
+    public function calculateTotalPengadaan()
     {
-        // Validasi request jika diperlukan
-    
-        // Ambil data dari request
-        $vendorId = $request->input('vendor');
-        $barangId = $request->input('barang');
-        $jumlah = $request->input('jumlah');
-        $hargaSatuan = Barang::find($barangId)->harga; // Ambil harga dari tabel barang
-    
-        // Hitung subtotal
-        $subTotal = $jumlah * $hargaSatuan;
-    
-        // Simpan ke tabel pengadaan
-        $pengadaan = new Pengadaan();
-        $pengadaan->user_id_user = auth()->user()->id;
-        $pengadaan->STATUS = 0; // Belum Selesai
-        $pengadaan->vendor_idvendor = $vendorId;
-        $pengadaan->subtotal_nilai = $subTotal;
-        $pengadaan->save();
-    
-        // Simpan ke tabel detail_pengadaan
-        $detailPengadaan = new DetailPengadaan();
-        $detailPengadaan->harga_satuan = $hargaSatuan;
-        $detailPengadaan->jumlah = $jumlah;
-        $detailPengadaan->sub_total = $subTotal;
-        $detailPengadaan->idbarang = $barangId;
-        $detailPengadaan->idpengadaan = $pengadaan->id_pengadaan;
-        $detailPengadaan->save();
-    
-        // TODO: Refresh atau perbarui data daftar pengadaan setelah penambahan
-    
-        return response()->json(['message' => 'Pengadaan berhasil ditambahkan'], 200);
+        // Menghitung total pengadaan menggunakan CalculateSubtotalPengadaan
+        $totalPengadaan = DB::select('SELECT CalculateSubtotalPengadaan(1) AS totalPengadaan')[0]->totalPengadaan;
+
+        return response()->json(['totalPengadaan' => $totalPengadaan]);
     }
+
+ 
+public function createPengadaan(Request $request)
+{
+    // Proses untuk membuat pengadaan baru
+    // Sesuaikan dengan struktur tabel 'pengadaan' dan 'detail_pengadaan'
+
+    $pengadaanId = DB::table('pengadaan')->insertGetId([
+        'TIMESTAMP' => now(),
+        'user_id_user' => $request->input('user_id_user'),
+        'vendor_idvendor' => $request->input('vendor_idvendor'),
+        'subtotal_nilai' => $request->input('sub_total'),
+        'ppn' => $request->input('ppn'),
+        'total_nilai' => $request->input('total_nilai'),
+        'STATUS' => 0,
+    ]);
+
+    DB::table('detail_pengadaan')->insert([
+        'harga_satuan' => $request->input('harga_satuan'),
+        'jumlah' => $request->input('jumlah'),
+        'sub_total' => $request->input('sub_total'),
+        'idbarang' => $request->input('idbarang'),
+        'idpengadaan' => $pengadaanId,
+    ]);
+
+    return response()->json(['success' => true]);
+}
 }

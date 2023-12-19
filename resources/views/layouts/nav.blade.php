@@ -11,6 +11,8 @@
             <li><a href="{{ route('items.index') }}"><i class='bx bx-group'></i>Barang</a></li>
             <li><a href="{{ route('users.index') }}"><i class='bx bx-group'></i>User</a></li>
             <li><a href="{{ route('pengadaan.index') }}"><i class='bx bx-group'></i>Pengadaan</a></li>
+            <li><a href="{{ route('margin_penjualan.index') }}"><i class='bx bx-group'></i>Margin Penjualan</a></li>
+            
         </ul>
         <ul class="side-menu">
             <li>
