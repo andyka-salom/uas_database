@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\DB;
 
 class MarginPenjualanController extends Controller
@@ -11,7 +13,7 @@ class MarginPenjualanController extends Controller
     {
         $marginPenjualans = DB::table('margin_penjualan')->get();
 
-        return view('marginpenjualan', compact('marginPenjualans'));
+        return view('admin.marginpenjualan', compact('marginPenjualans'));
     }
 
     public function store(Request $request)
@@ -19,10 +21,11 @@ class MarginPenjualanController extends Controller
         $request->validate([
             'persen' => 'required|numeric',
         ]);
-
+        $userId = Auth::id();
         DB::table('margin_penjualan')->insert([
             'persen' => $request->input('persen'),
-            'STATUS' => 1, // Assuming default status is active
+            'STATUS' => 1,
+            'iduser' => $userId,
         ]);
 
         return redirect()->route('margin_penjualan.index');

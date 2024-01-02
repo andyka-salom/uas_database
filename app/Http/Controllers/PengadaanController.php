@@ -16,7 +16,7 @@ class PengadaanController extends Controller
     
         $vendors = DB::table('vendor')->get();
     
-        return view('pengadaan', [
+        return view('admin.pengadaan', [
             'pengadaanDetails' => $pengadaanDetails,
             'barangs' => $barangs,
             'vendors' => $vendors,
@@ -25,7 +25,6 @@ class PengadaanController extends Controller
     
     public function calculateTotalPengadaan()
     {
-        // Menghitung total pengadaan menggunakan CalculateSubtotalPengadaan
         $totalPengadaan = DB::select('SELECT CalculateSubtotalPengadaan(1) AS totalPengadaan')[0]->totalPengadaan;
 
         return response()->json(['totalPengadaan' => $totalPengadaan]);
@@ -34,12 +33,9 @@ class PengadaanController extends Controller
  
 public function createPengadaan(Request $request)
 {
-    // Proses untuk membuat pengadaan baru
-    // Sesuaikan dengan struktur tabel 'pengadaan' dan 'detail_pengadaan'
-
     $pengadaanId = DB::table('pengadaan')->insertGetId([
         'TIMESTAMP' => now(),
-        'user_id_user' => $request->input('user_id_user'),
+        'user_id' => $request->input('user_id_user'),
         'vendor_idvendor' => $request->input('vendor_idvendor'),
         'subtotal_nilai' => $request->input('sub_total'),
         'ppn' => $request->input('ppn'),

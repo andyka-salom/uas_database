@@ -1,0 +1,694 @@
+CREATE DATABASE uassss
+
+CREATE TABLE roles(
+  id_role INT NOT NULL AUTO_INCREMENT,
+  nama_role VARCHAR(100) NULL,
+  STATUS TINYINT NULL,
+  PRIMARY KEY (id_role)
+);
+
+CREATE TABLE users(
+  id INT NOT NULL AUTO_INCREMENT,
+  username VARCHAR(45) NULL,
+  PASSWORD VARCHAR(100) NULL,
+  email VARCHAR(60),
+  idrole INT NOT NULL,
+  STATUS TINYINT NULL,
+  PRIMARY KEY (id),
+  remember_token VARCHAR(225) NULL,
+  INDEX fk_user_role_idx (idrole ASC),
+  CONSTRAINT fk_user_role
+    FOREIGN KEY (idrole)
+    REFERENCES roles (id_role)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+
+CREATE TABLE satuan (
+  id_satuan INT NOT NULL AUTO_INCREMENT,
+  nama_satuan VARCHAR(45) NULL,
+  STATUS TINYINT NULL,
+  PRIMARY KEY (id_satuan)
+);
+
+CREATE TABLE barang (
+  id_barang INT NOT NULL AUTO_INCREMENT,
+  jenis CHAR(1) NULL,
+  nama VARCHAR(45) NULL,
+  id_satuan INT NOT NULL,
+  STATUS TINYINT NULL,
+  harga INT NULL,
+  PRIMARY KEY (id_barang),
+  INDEX fk_barang_satuan1_idx (id_satuan ASC),
+  CONSTRAINT fk_barang_satuan1
+    FOREIGN KEY (id_satuan)
+    REFERENCES satuan (id_satuan)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+CREATE TABLE vendor (
+  id_vendor INT NOT NULL AUTO_INCREMENT,
+  nama_vendor VARCHAR(100) NULL,
+  badan_hukum CHAR(1) NULL,
+  STATUS CHAR(1) NULL,
+  PRIMARY KEY (id_vendor)
+);
+
+CREATE TABLE pengadaan (
+  id_pengadaan BIGINT NOT NULL AUTO_INCREMENT,
+  TIMESTAMP TIMESTAMP NULL,
+  user_id INT NOT NULL,
+  STATUS TINYINT NULL,
+  vendor_idvendor INT NOT NULL,
+  subtotal_nilai INT NULL,
+  ppn INT NULL,
+  total_nilai INT NULL,
+  PRIMARY KEY (id_pengadaan),
+  INDEX fk_pengadaan_user1_idx (user_id ASC),
+  INDEX fk_pengadaan_vendor1_idx (vendor_idvendor ASC),
+  CONSTRAINT fk_pengadaan_user1
+    FOREIGN KEY (user_id)
+    REFERENCES users (id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_pengadaan_vendor1
+    FOREIGN KEY (vendor_idvendor)
+    REFERENCES vendor (id_vendor)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+CREATE TABLE detail_pengadaan (
+  iddetail_pengadaan BIGINT NOT NULL AUTO_INCREMENT,
+  harga_satuan INT NULL,
+  jumlah INT NULL,
+  sub_total INT NULL,
+  idbarang INT NOT NULL,
+  idpengadaan BIGINT NOT NULL,
+  PRIMARY KEY (iddetail_pengadaan),
+  INDEX fk_detail_pengadaan_barang1_idx (idbarang ASC),
+  INDEX fk_detail_pengadaan_pengadaan1_idx (idpengadaan ASC),
+  CONSTRAINT fk_detail_pengadaan_barang1
+    FOREIGN KEY (idbarang)
+    REFERENCES barang (id_barang)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_detail_pengadaan_pengadaan1
+    FOREIGN KEY (idpengadaan)
+    REFERENCES pengadaan (id_pengadaan)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+CREATE TABLE penerimaan (
+  idpenerimaan BIGINT NOT NULL AUTO_INCREMENT,
+  created_at TIMESTAMP NULL,
+  STATUS CHAR(1) NULL,
+  idpengadaan BIGINT NOT NULL,
+  iduser INT NOT NULL,
+  PRIMARY KEY (idpenerimaan),
+  INDEX fk_penerimaan_pengadaan1_idx (idpengadaan ASC),
+  INDEX fk_penerimaan_user1_idx (iduser ASC),
+  CONSTRAINT fk_penerimaan_pengadaan1
+    FOREIGN KEY (idpengadaan)
+    REFERENCES pengadaan (id_pengadaan)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_penerimaan_user1
+    FOREIGN KEY (iduser)
+    REFERENCES users (id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+CREATE TABLE detail_penerimaan (
+  iddetail_penerimaan BIGINT NOT NULL AUTO_INCREMENT,
+  idpenerimaan BIGINT NOT NULL,
+  barang_idbarang INT NOT NULL,
+  jumlah_terima INT NULL,
+  harga_satuan_terima INT NULL,
+  sub_total_terima INT NULL,
+  PRIMARY KEY (iddetail_penerimaan),
+  INDEX fk_detail_penerimaan_barang1_idx (barang_idbarang ASC),
+  INDEX fk_detail_penerimaan_penerimaan1_idx (idpenerimaan ASC),
+  CONSTRAINT fk_detail_penerimaan_penerimaan1
+    FOREIGN KEY (idpenerimaan)
+    REFERENCES penerimaan (idpenerimaan)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_detail_penerimaan_barang1
+    FOREIGN KEY (barang_idbarang)
+    REFERENCES barang (id_barang)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+
+
+CREATE TABLE retur (
+  idretur BIGINT NOT NULL AUTO_INCREMENT,
+  created_at TIMESTAMP NULL,
+  idpenerimaan BIGINT NOT NULL,
+  iduser INT NOT NULL,
+  PRIMARY KEY (idretur),
+  INDEX fk_retur_penerimaan1_idx (idpenerimaan ASC),
+  INDEX fk_retur_user1_idx (iduser ASC),
+  CONSTRAINT fk_retur_penerimaan1
+    FOREIGN KEY (idpenerimaan)
+    REFERENCES penerimaan (idpenerimaan)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_retur_user1
+    FOREIGN KEY (iduser)
+    REFERENCES users (id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+CREATE TABLE detail_retur (
+  iddetail_retur INT NOT NULL AUTO_INCREMENT,
+  jumlah INT NULL,
+  alasan VARCHAR(200) NULL,
+  idretur BIGINT NOT NULL,
+  iddetail_penerimaan BIGINT NOT NULL,
+  PRIMARY KEY (iddetail_retur),
+  INDEX fk_detail_retur_retur1_idx (idretur ASC),
+  INDEX fk_detail_retur_detail_penerimaan1_idx (iddetail_penerimaan ASC),
+  CONSTRAINT fk_detail_retur_retur1
+    FOREIGN KEY (idretur)
+    REFERENCES retur (idretur)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_detail_retur_detail_penerimaan1
+    FOREIGN KEY (iddetail_penerimaan)
+    REFERENCES detail_penerimaan (iddetail_penerimaan)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+
+CREATE TABLE margin_penjualan (
+  idmargin_penjualan INT NOT NULL AUTO_INCREMENT,
+  created_at TIMESTAMP NULL,
+  persen DOUBLE NULL,
+  STATUS TINYINT NULL,
+  iduser INT NOT NULL,
+  updated_at TIMESTAMP NULL,
+  PRIMARY KEY (idmargin_penjualan),
+  INDEX fk_margin_penjualan_user1_idx (iduser ASC),
+  CONSTRAINT fk_margin_penjualan_user1
+    FOREIGN KEY (iduser)
+    REFERENCES users (id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+CREATE TABLE penjualan (
+  idpenjualan INT NOT NULL AUTO_INCREMENT,
+  created_at TIMESTAMP NULL,
+  subtotal_nilai INT NULL,
+  ppn INT NULL,
+  total_nilai INT NULL,
+  iduser INT NOT NULL,
+  idmargin_penjualan INT NOT NULL,
+  PRIMARY KEY (idpenjualan),
+  INDEX fk_penjualan_user1_idx (iduser ASC),
+  INDEX fk_penjualan_margin_penjualan1_idx (idmargin_penjualan ASC),
+  CONSTRAINT fk_penjualan_user1
+    FOREIGN KEY (iduser)
+    REFERENCES users (id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_penjualan_margin_penjualan1
+    FOREIGN KEY (idmargin_penjualan)
+    REFERENCES margin_penjualan (idmargin_penjualan)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+CREATE TABLE detail_penjualan (
+  iddetail_penjualan BIGINT NOT NULL AUTO_INCREMENT,
+  harga_satuan INT NULL,
+  jumlah INT NULL,
+  subtotal INT NULL,
+  penjualan_idpenjualan INT NOT NULL,
+  idbarang INT NOT NULL,
+  PRIMARY KEY (iddetail_penjualan),
+  INDEX fk_detail_penjualan_penjualan1_idx (penjualan_idpenjualan ASC),
+  INDEX fk_detail_penjualan_barang1_idx (idbarang ASC),
+  CONSTRAINT fk_detail_penjualan_penjualan1
+    FOREIGN KEY (penjualan_idpenjualan)
+    REFERENCES penjualan (idpenjualan)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_detail_penjualan_barang1
+    FOREIGN KEY (idbarang)
+    REFERENCES barang (id_barang)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+CREATE TABLE kartu_stok (
+  id_kartu_stok BIGINT NOT NULL AUTO_INCREMENT,
+  jenis_transaksi CHAR(1) NULL,
+  masuk INT NULL,
+  keluar INT NULL,
+  stock INT NULL,
+  created_at TIMESTAMP NULL,
+  idtransaksi INT NULL,
+  idbarang INT NOT NULL,
+  PRIMARY KEY (id_kartu_stok),
+  INDEX fk_kartu_stok_barang1_idx (idbarang ASC),
+  CONSTRAINT fk_kartu_stok_barang1
+    FOREIGN KEY (idbarang)
+    REFERENCES barang (id_barang)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+INSERT INTO roles (nama_role, STATUS) VALUES
+('Admin', 1),
+('Kasir', 1),
+('Gudang', 1);
+
+
+INSERT INTO users (username, PASSWORD, email, idrole, STATUS) VALUES
+('admin', 'admin123', 'admin@example.com', 1, 1),
+('kasir1', 'kasir123', 'kasir1@example.com', 2, 1),
+('gudang1', 'gudang123', 'gudang1@example.com', 3, 1);
+
+INSERT INTO satuan (nama_satuan, STATUS) VALUES
+('Buah', 1),
+('Kg', 1),
+('Lusin', 1);
+
+INSERT INTO barang (jenis, nama, id_satuan, STATUS, harga) VALUES
+('A', 'Barang A', 1, 1, 10000),
+('B', 'Barang B', 2, 1, 5000),
+('C', 'Barang C', 3, 1, 20000);
+
+INSERT INTO vendor (nama_vendor, badan_hukum, STATUS) VALUES
+('Vendor A', 'Y', 'A'),
+('Vendor B', 'N', 'B'),
+('Vendor C', 'Y', 'C');
+
+INSERT INTO pengadaan (TIMESTAMP, user_id, STATUS, vendor_idvendor, subtotal_nilai, ppn, total_nilai) VALUES
+('2023-01-01', 1, 1, 1, 30000, 3000, 33000),
+('2023-02-01', 2, 1, 2, 20000, 2000, 22000),
+('2023-03-01', 3, 1, 3, 40000, 4000, 44000);
+
+
+INSERT INTO detail_pengadaan (harga_satuan, jumlah, sub_total, idbarang, idpengadaan) VALUES
+(10000, 2, 20000, 1, 1),
+(5000, 4, 20000, 2, 2),
+(20000, 2, 40000, 3, 3);
+
+INSERT INTO penerimaan (created_at, STATUS, idpengadaan, iduser) VALUES
+('2023-01-10', 'A', 1, 1),
+('2023-02-15', 'B', 2, 2),
+('2023-03-20', 'C', 3, 3);
+
+INSERT INTO detail_penerimaan (idpenerimaan, barang_idbarang, jumlah_terima, harga_satuan_terima, sub_total_terima) VALUES
+(1, 1, 2, 9000, 18000),
+(2, 2, 4, 4500, 18000),
+(3, 3, 2, 18000, 36000);
+
+INSERT INTO retur (created_at, idpenerimaan, iduser) VALUES
+('2023-01-15', 1, 1),
+('2023-02-20', 2, 2),
+('2023-03-25', 3, 3);
+
+INSERT INTO detail_retur (jumlah, alasan, idretur, iddetail_penerimaan) VALUES
+(1, 'Rusak', 1, 1),
+(2, 'Salah barang', 2, 2),
+(1, 'Expired', 3, 3);
+
+INSERT INTO margin_penjualan (created_at, persen, STATUS, iduser, updated_at) VALUES
+('2023-01-01', 10, 1, 1, NULL),
+('2023-02-01', 8, 1, 2, NULL),
+('2023-03-01', 12, 1, 3, NULL);
+
+INSERT INTO penjualan (created_at, subtotal_nilai, ppn, total_nilai, iduser, idmargin_penjualan) VALUES
+('2023-01-15', 30000, 3000, 33000, 1, 1),
+('2023-02-20', 20000, 2000, 22000, 2, 2),
+('2023-03-25', 40000, 4000, 44000, 3, 3);
+
+INSERT INTO detail_penjualan (harga_satuan, jumlah, subtotal, penjualan_idpenjualan, idbarang) VALUES
+(10000, 2, 20000, 1, 1),
+(5000, 4, 20000, 2, 2),
+(20000, 2, 40000, 3, 3);
+
+INSERT INTO kartu_stok (jenis_transaksi, masuk, keluar, stock, created_at, idtransaksi, idbarang) VALUES
+('M', 2, 0, 2, '2023-01-10', 1, 1),
+('M', 4, 0, 4, '2023-02-15', 2, 2),
+('M', 2, 0, 2, '2023-03-20', 3, 3);
+  
+
+-- VIEW
+-- digunain di stock 
+CREATE VIEW kartustok AS
+SELECT
+  ks.idbarang,
+  b.nama AS barang_nama,
+  MAX(ks.created_at) AS last_transaction_date,
+  SUM(ks.masuk) AS total_masuk,
+  SUM(ks.keluar) AS total_keluar,
+  SUM(ks.masuk - ks.keluar) AS total_stock
+FROM
+  kartu_stok ks
+JOIN
+  barang b ON ks.idbarang = b.id_barang
+GROUP BY
+  ks.idbarang, b.nama
+ORDER BY
+  last_transaction_date DESC;
+
+CREATE OR REPLACE VIEW ViewSalesDetails AS
+SELECT 
+  ps.idpenjualan,
+  ps.created_at,
+  u.username AS user_name,
+  dp.iddetail_penjualan,
+  b.nama AS barang_name,
+  dp.harga_satuan,
+  dp.jumlah,
+  dp.subtotal,
+  ps.ppn,
+  mp.persen AS margin_penjualan,
+  ps.total_nilai
+FROM penjualan ps
+JOIN users u ON ps.iduser = u.id
+JOIN detail_penjualan dp ON ps.idpenjualan = dp.penjualan_idpenjualan
+JOIN barang b ON dp.idbarang = b.id_barang
+JOIN margin_penjualan mp ON ps.idmargin_penjualan = mp.idmargin_penjualan;
+
+
+CREATE VIEW penerimaan_details AS
+SELECT
+    p.idpenerimaan,
+    p.created_at,
+    u.username AS user_username,
+    d.barang_idbarang,
+    d.jumlah_terima,
+    d.harga_satuan_terima,
+    d.sub_total_terima
+FROM
+    penerimaan p
+    JOIN users u ON p.iduser = u.id
+    JOIN detail_penerimaan d ON p.idpenerimaan = d.idpenerimaan;
+    
+    
+   -- di pengadaan
+    CREATE VIEW ViewProcurementDetails AS
+SELECT 
+   p.id_pengadaan,
+   p.TIMESTAMP,
+   u.username AS user_name,
+   v.nama_vendor,
+   dp.iddetail_pengadaan,
+   b.nama AS barang_name,
+   dp.harga_satuan,
+   dp.jumlah,
+   dp.sub_total,
+   p.STATUS,
+   p.ppn,
+   p.total_nilai
+FROM pengadaan p
+JOIN users u ON p.user_id = u.id
+JOIN vendor v ON p.vendor_idvendor = v.id_vendor
+JOIN detail_pengadaan dp ON p.id_pengadaan = dp.idpengadaan
+JOIN barang b ON dp.idbarang = b.id_barang;
+
+-- di return 
+CREATE VIEW ViewReturnDetails AS
+SELECT 
+  r.idretur,
+  r.created_at,
+  u.username AS user_name,
+  dp.iddetail_retur,
+  dp.jumlah,
+  dp.alasan,
+  b.nama AS barang_name
+FROM retur r
+JOIN users u ON r.iduser = u.id
+JOIN detail_retur dp ON r.idretur = dp.idretur
+JOIN detail_penerimaan dpr ON dp.iddetail_penerimaan = dpr.iddetail_penerimaan
+JOIN barang b ON dpr.barang_idbarang = b.id_barang;
+
+
+-- FUNCTION 
+
+-- Function untuk Menghitung Total Penjualan:
+DELIMITER //
+CREATE FUNCTION CalculateTotalSales(in_salesID INT) RETURNS INT
+BEGIN
+  DECLARE totalSales INT;
+  SELECT SUM(subtotal) INTO totalSales
+  FROM detail_penjualan
+  WHERE penjualan_idpenjualan = in_salesID;
+  RETURN totalSales;
+END //
+DELIMITER ;
+
+-- Function untuk Menghitung Subtotal Pengadaan:
+DELIMITER //
+CREATE FUNCTION CalculateSubtotalPengadaan(in_pengadaanID INT) RETURNS INT
+BEGIN
+  DECLARE subtotalPengadaan INT;
+  SELECT SUM(sub_total) INTO subtotalPengadaan
+  FROM detail_pengadaan
+  WHERE idpengadaan = in_pengadaanID;
+  RETURN subtotalPengadaan;
+END //
+DELIMITER ;
+
+
+
+
+-- STORE PROCEDURE 
+DELIMITER //
+CREATE PROCEDURE GenerateDailySalesReport(IN p_date DATE)
+BEGIN
+    SELECT 
+        DATE_FORMAT(ps.created_at, '%Y-%m-%d') AS sales_date,
+        u.username AS user_name,
+        ps.subtotal_nilai,
+        ps.ppn,
+        ps.total_nilai
+    FROM penjualan ps
+    JOIN users u ON ps.iduser = u.id
+    WHERE DATE(ps.created_at) = p_date;
+END //
+DELIMITER ;
+DELIMITER //
+
+-- Stored Procedure untuk Menampilkan Ringkasan Pengadaan:
+DELIMITER //
+CREATE PROCEDURE GetProcurementSummary(IN procurementID INT)
+BEGIN
+  SELECT 
+    p.id_pengadaan,
+    p.TIMESTAMP,
+    u.username AS user_name,
+    v.nama_vendor,
+    COUNT(dp.iddetail_pengadaan) AS total_items,
+    p.subtotal_nilai,
+    p.ppn,
+    p.total_nilai
+  FROM pengadaan p
+  JOIN users u ON p.user_id = u.id
+  JOIN vendor v ON p.vendor_idvendor = v.id_vendor
+  JOIN detail_pengadaan dp ON p.id_pengadaan = dp.idpengadaan
+  WHERE p.id_pengadaan = procurementID;
+END //
+DELIMITER ;
+
+-- Stored Procedure untuk Menampilkan Ringkasan Penjualan:
+DELIMITER //
+CREATE PROCEDURE GetSalesSummary(IN salesID INT)
+BEGIN
+  SELECT 
+    ps.idpenjualan,
+    ps.created_at,
+    u.username AS user_name,
+    ps.subtotal_nilai,
+    ps.ppn,
+    ps.total_nilai
+  FROM penjualan ps
+  JOIN users u ON ps.iduser = u.id
+  WHERE ps.idpenjualan = salesID;
+END //
+DELIMITER ;
+
+
+
+DELIMITER //
+CREATE PROCEDURE tambah_penerimaan(
+    IN p_idpengadaan BIGINT,
+    IN p_status CHAR(1),
+    IN p_iduser INT,
+    IN p_barang_idbarang INT,
+    IN p_jumlah_terima INT,
+    IN p_harga_satuan_terima INT
+)
+BEGIN
+    DECLARE v_idpenerimaan BIGINT;
+    DECLARE v_sub_total_terima INT;
+
+    -- Insert data into penerimaan table
+    INSERT INTO penerimaan (idpengadaan, STATUS, iduser, created_at)
+    VALUES (p_idpengadaan, p_status, p_iduser, NOW());
+
+    -- Get the last inserted idpenerimaan
+    SET v_idpenerimaan = LAST_INSERT_ID();
+
+    -- Calculate sub total terima
+    SET v_sub_total_terima = p_jumlah_terima * p_harga_satuan_terima;
+
+    -- Insert data into detail_penerimaan table
+    INSERT INTO detail_penerimaan (idpenerimaan, barang_idbarang, jumlah_terima, harga_satuan_terima, sub_total_terima)
+    VALUES (v_idpenerimaan, p_barang_idbarang, p_jumlah_terima, p_harga_satuan_terima, v_sub_total_terima);
+
+END //
+DELIMITER ;
+
+
+DELIMITER //
+
+CREATE PROCEDURE tambah_retur(
+    IN p_idpenerimaan BIGINT,
+    IN p_iduser INT,
+    IN p_barang_idbarang INT,
+    IN p_jumlah INT,
+    IN p_alasan VARCHAR(200)
+)
+BEGIN
+    DECLARE v_idretur BIGINT;
+
+    -- Insert data into retur table
+    INSERT INTO retur (created_at, idpenerimaan, iduser)
+    VALUES (NOW(), p_idpenerimaan, p_iduser);
+
+    -- Get the last inserted idretur
+    SET v_idretur = LAST_INSERT_ID();
+
+    -- Insert data into detail_retur table
+    INSERT INTO detail_retur (jumlah, alasan, idretur, iddetail_penerimaan)
+    VALUES (p_jumlah, p_alasan, v_idretur, p_idpenerimaan);
+
+END //
+
+DELIMITER ;
+
+
+DELIMITER //
+
+CREATE PROCEDURE tambah_penjualan(
+    IN p_created_at TIMESTAMP,
+    IN p_subtotal_nilai INT,
+    IN p_ppn INT,
+    IN p_total_nilai INT,
+    IN p_iduser INT,
+    IN p_idmargin_penjualan INT,
+    IN p_harga_satuan INT,
+    IN p_jumlah INT,
+    IN p_subtotal INT,
+    IN p_idbarang INT
+)
+BEGIN
+    DECLARE v_idpenjualan INT;
+
+    -- Start a transaction
+    START TRANSACTION;
+
+    -- Insert data into penjualan table
+    INSERT INTO penjualan (created_at, subtotal_nilai, ppn, total_nilai, iduser, idmargin_penjualan)
+    VALUES (p_created_at, p_subtotal_nilai, p_ppn, p_total_nilai, p_iduser, p_idmargin_penjualan);
+
+    -- Get the last inserted idpenjualan
+    SET v_idpenjualan = LAST_INSERT_ID();
+
+    -- Insert data into detail_penjualan table
+    INSERT INTO detail_penjualan (harga_satuan, jumlah, subtotal, penjualan_idpenjualan, idbarang)
+    VALUES (p_harga_satuan, p_jumlah, p_subtotal, v_idpenjualan, p_idbarang);
+
+    -- Commit the transaction
+    COMMIT;
+
+END //
+
+DELIMITER ;
+
+
+
+
+-- TRIGGER
+
+-- Trigger untuk Menangani Penambahan Data pada Tabel detail_penjualan
+DELIMITER //
+CREATE TRIGGER AfterInsertDetailPenjualan
+AFTER INSERT ON detail_penjualan
+FOR EACH ROW
+BEGIN
+    DECLARE stock INT;
+    SELECT stock INTO stock
+    FROM kartu_stok
+    WHERE idbarang = NEW.idbarang
+    ORDER BY created_at DESC
+    LIMIT 1;
+
+    IF stock IS NULL THEN
+        SET stock = 0;
+    END IF;
+
+    INSERT INTO kartu_stok (jenis_transaksi, masuk, keluar, stock, created_at, idtransaksi, idbarang)
+    VALUES ('S', 0, NEW.jumlah, stock + NEW.jumlah, NOW(), NEW.penjualan_idpenjualan, NEW.idbarang);
+END //
+DELIMITER ;
+
+-- Trigger untuk Menangani Penambahan Data pada Tabel detail_penerimaan
+DELIMITER //
+CREATE TRIGGER AfterInsertDetailPenerimaan
+AFTER INSERT ON detail_penerimaan
+FOR EACH ROW
+BEGIN
+    DECLARE stock INT;
+    SELECT stock INTO stock
+    FROM kartu_stok
+    WHERE idbarang = NEW.barang_idbarang
+    ORDER BY created_at DESC
+    LIMIT 1;
+
+    IF stock IS NULL THEN
+        SET stock = 0;
+    END IF;
+
+    INSERT INTO kartu_stok (jenis_transaksi, masuk, keluar, stock, created_at, idtransaksi, idbarang)
+    VALUES ('P', NEW.jumlah_terima, 0, stock + NEW.jumlah_terima, NOW(), NEW.idpenerimaan, NEW.barang_idbarang);
+END //
+DELIMITER ;
+
+-- Trigger untuk Menangani Penambahan Data pada Tabel detail_retur
+DELIMITER //
+CREATE TRIGGER AfterInsertDetailRetur
+AFTER INSERT ON detail_retur
+FOR EACH ROW
+BEGIN
+    DECLARE stock INT;
+    SELECT stock INTO stock
+    FROM kartu_stok
+    WHERE idbarang = NEW.iddetail_penerimaan
+    ORDER BY created_at DESC
+    LIMIT 1;
+
+    IF stock IS NULL THEN
+        SET stock = 0;
+    END IF;
+
+    INSERT INTO kartu_stok (jenis_transaksi, masuk, keluar, stock, created_at, idtransaksi, idbarang)
+    VALUES ('R', 0, NEW.jumlah, stock + NEW.jumlah, NOW(), NEW.idretur, NEW.iddetail_penerimaan);
+END //
+DELIMITER ;
+
+

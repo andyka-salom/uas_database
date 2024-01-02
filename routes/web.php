@@ -2,10 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ItemController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ReturController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\ReturnController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\VendorController;
+use App\Http\Controllers\ReceiptController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KartuStokController;
 
 
 /*
@@ -19,9 +27,12 @@ use App\Http\Controllers\VendorController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [AuthController::class, 'index'])->name('login.index');
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/calculateTotalSales/{salesID}', [DashboardController::class, 'calculateTotalSales'])->name('calculateTotalSales');
 
 
 Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
@@ -55,7 +66,11 @@ Route::get('/roles/{id}/edit', [RoleController::class, 'edit'])->name('roles.edi
 Route::put('/roles/{id}', [RoleController::class, 'update'])->name('roles.update');
 Route::delete('/roles/{id}', [RoleController::class, 'destroy'])->name('roles.destroy');
 
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\PemesananController;
+use App\Http\Controllers\PengadaanController;
+use App\Http\Controllers\PenjualanController;
+use App\Http\Controllers\PenerimaanController;
+use App\Http\Controllers\MarginPenjualanController;
 
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
 Route::post('/users', [UserController::class, 'store'])->name('users.store');
@@ -64,7 +79,7 @@ Route::post('/users/{id}/activate', [UserController::class, 'activate'])->name('
 Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
 
-use App\Http\Controllers\ItemController;
+
 
 Route::get('/items', [ItemController::class, 'index'])->name('items.index');
 Route::post('/items', [ItemController::class, 'store'])->name('items.store');
@@ -74,16 +89,48 @@ Route::delete('/items/{id}', [ItemController::class, 'destroy'])->name('items.de
 
 // routes/web.php
 
-use App\Http\Controllers\PengadaanController;
 
 Route::get('/pengadaan', [PengadaanController::class, 'index'])->name('pengadaan.index');
 Route::get('/api/calculateTotalPengadaan', [PengadaanController::class, 'calculateTotalPengadaan']);
 Route::post('/api/createPengadaan', [PengadaanController::class, 'createPengadaan']);
 
-use App\Http\Controllers\MarginPenjualanController;
 
 Route::get('/margin_penjualan', [MarginPenjualanController::class, 'index'])->name('margin_penjualan.index');
 Route::post('/margin_penjualan', [MarginPenjualanController::class, 'store'])->name('margin_penjualan.store');
 Route::put('/margin_penjualan/{id}', [MarginPenjualanController::class, 'update'])->name('margin_penjualan.update');
 Route::post('/margin_penjualan/activate/{id}', [MarginPenjualanController::class, 'activate'])->name('margin_penjualan.activate');
 Route::delete('/margin_penjualan/{id}', [MarginPenjualanController::class, 'destroy'])->name('margin_penjualan.destroy');
+
+Route::get('/retur', [ReturnController::class, 'index'])->name('retur');
+Route::post('/add-return', [ReturnController::class, 'addReturn'])->name('addReturn');
+
+
+Route::view('/returns', 'admin.retur')->name('returns');
+Route::get('/api/returns', [ReturController::class, 'index']);
+Route::get('/api/returns/{id}', [ReturController::class, 'show']);
+
+Route::get('/receipt', [ReceiptController::class, 'index'])->name('receipt.index');
+Route::get('/receipt/create', [ReceiptController::class, 'create'])->name('receipt.create');
+Route::post('/receipt/store', [ReceiptController::class, 'store'])->name('receipt.store');
+// Add other routes as needed
+
+
+
+Route::get('/penerimaan', [PenerimaanController::class, 'index'])->name('penerimaan.index');
+// Add Penerimaan
+Route::post('/tambah-penerimaan', [PenerimaanController::class, 'tambahPenerimaan'])->name('tambahPenerimaan');
+
+
+Route::get('/kartustok', [KartuStokController::class, 'index'])->name('kartustok.index');
+
+
+
+Route::post('/tambah-penjualan', [PenjualanController::class, 'tambahPenjualan'])->name('penjualan.index');
+
+
+
+Route::get('/pemesanan', [PemesananController::class, 'index'])->name('pemesanan.index');
+Route::post('/tambah-penjualan', [PemesananController::class, 'tambahPenjualan'])->name('tambah_penjualan');
+
+
+Route::get('/dashboard', [DashboardController::class, 'index']);

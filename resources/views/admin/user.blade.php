@@ -37,23 +37,23 @@
             <tbody>
                 @foreach($users as $user)
                     <tr>
-                        <td>{{ $user->id_user }}</td>
-                        <td class="editable" data-field="username" data-id="{{ $user->id_user }}">{{ $user->username }}</td>
+                        <td>{{ $user->id }}</td>
+                        <td class="editable" data-field="username" data-id="{{ $user->id }}">{{ $user->username }}</td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->role_name }}</td>
                         <td>
                             @if($user->STATUS == 1)
                                 Active
                             @else
-                                <form action="{{ route('users.activate', $user->id_user) }}" method="POST">
+                                <form action="{{ route('users.activate', $user->id) }}" method="POST">
                                     @csrf
                                     <button type="submit">Activate</button>
                                 </form>
                             @endif
                         </td>
                         <td>
-                            <button class="edit-btn" data-id="{{ $user->id_user }}">Edit</button>
-                            <form action="{{ route('users.destroy', $user->id_user) }}" method="POST">
+                            <button class="edit-btn" data-id="{{ $user->id }}">Edit</button>
+                            <form action="{{ route('users.destroy', $user->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>

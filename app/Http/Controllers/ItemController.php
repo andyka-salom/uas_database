@@ -16,7 +16,7 @@ class ItemController extends Controller
 
         $units = DB::table('satuan')->get();
 
-        return view('barang', compact('items', 'units'));
+        return view('admin.barang', compact('items', 'units'));
     }
 
     public function store(Request $request)

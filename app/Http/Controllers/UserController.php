@@ -16,7 +16,7 @@ class UserController extends Controller
 
         $roles = DB::table('roles')->get();
 
-        return view('user', compact('users', 'roles'));
+        return view('admin.user', compact('users', 'roles'));
     }
 
     public function store(Request $request)
@@ -33,7 +33,7 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
             'email' => $request->email,
             'idrole' => $request->idrole,
-            'STATUS' => 1, // Assuming 1 is for active status
+            'STATUS' => 1, 
         ]);
 
         return redirect()->route('users.index');
@@ -41,14 +41,14 @@ class UserController extends Controller
 
     public function activate($id)
     {
-        DB::table('users')->where('id_user', $id)->update(['STATUS' => 1]);
+        DB::table('users')->where('id', $id)->update(['STATUS' => 1]);
 
         return redirect()->route('users.index');
     }
 
     public function destroy($id)
     {
-        DB::table('users')->where('id_user', $id)->update(['STATUS' => 0]);
+        DB::table('users')->where('id', $id)->update(['STATUS' => 0]);
 
         return redirect()->route('users.index');
     }
@@ -61,11 +61,10 @@ class UserController extends Controller
             'idrole' => 'required|exists:roles,id_role',
         ]);
 
-        DB::table('users')->where('id_user', $id)->update([
+        DB::table('users')->where('id', $id)->update([
             'username' => $request->username,
             'email' => $request->email,
             'idrole' => $request->idrole,
-            // Update other fields as needed
         ]);
 
         return redirect()->route('users.index');

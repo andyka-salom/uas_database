@@ -26,7 +26,7 @@
                         <th>Harga Satuan</th>
                         <th>Jumlah</th>
                         <th>Subtotal</th>
-                        <th>Ppn</th>
+                        <th>Ppn (%)</th>
                         <th>Total</th>
                         <th>Status</th>
                     </tr>

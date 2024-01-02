@@ -10,13 +10,13 @@ class VendorController extends Controller
     public function index()
     {
         $vendors = DB::table('vendor')->get();
-        return view('vendor', compact('vendors'));
+        return view('admin.vendor', compact('vendors'));
     }
 
     public function edit($id)
     {
         $vendor = DB::table('vendor')->where('id_vendor', $id)->first();
-        return view('vendor', compact('vendor'));
+        return view('admin.vendor', compact('vendor'));
     }
 
     public function update(Request $request, $id)
@@ -25,7 +25,6 @@ class VendorController extends Controller
             ->where('id_vendor', $id)
             ->update([
                 'nama_vendor' => $request->input('nama_vendor'),
-                // Other fields to update
             ]);
 
         return redirect()->route('vendors.index')->with('success', 'Vendor updated successfully');
@@ -35,8 +34,7 @@ class VendorController extends Controller
     {
         $newVendorID = DB::table('vendor')->insertGetId([
             'nama_vendor' => $request->input('nama_vendor'),
-            // Other fields to insert
-            'STATUS' => 1, // Assuming newly added vendors are initially active
+            'STATUS' => 1,
         ]);
 
         return redirect()->route('vendors.index')->with('success', 'Vendor added successfully');
@@ -46,7 +44,7 @@ class VendorController extends Controller
     {
         DB::table('vendor')
             ->where('id_vendor', $id)
-            ->update(['STATUS' => 0]); // Assuming STATUS field represents active/inactive
+            ->update(['STATUS' => 0]);
 
         return redirect()->route('vendors.index')->with('success', 'Vendor deleted successfully');
     }
