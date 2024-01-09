@@ -68,10 +68,7 @@
                 @csrf
                 <form id="formPengadaan">
                    
-                    <div class="form-group">
-                        <label for="user_id_user">ID User:</label>
-                        <input type="text" class="form-control" name="user_id_user" required>
-                    </div>
+                    
                     <div class="form-group">
                         <label for="vendor_idvendor">Vendor:</label>
                         <select class="form-control" name="vendor_idvendor" required>

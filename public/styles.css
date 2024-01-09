@@ -621,18 +621,16 @@ body{
     }
 
 }
-
-
 .content {
-    max-width: 1600px;
+    max-width: 80%;
     margin: 0 auto;
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-top: 50px;
-    margin-right:100px;
-    margin-left: 20px;
+    margin-right: 15%;
+   
 }
 
 h1 {
@@ -650,8 +648,8 @@ label {
 }
 
 input[type="text"] {
-    width: 100%;
-    padding: 8px;
+    width: calc(100% - 16px);
+    padding: 10px;
     margin-bottom: 12px;
     box-sizing: border-box;
     border: 1px solid #ccc;
@@ -659,7 +657,7 @@ input[type="text"] {
 }
 
 button {
-    background-color: #4caf50;
+    background-color: #4a4f4f;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -668,31 +666,59 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #03e9f4;
+}
+/* Style for the table container */
+.table-container {
+    overflow-x: auto;
+    max-width: 100%; /* Ensure the table container doesn't overflow its parent */
 }
 
+/* Style for the table */
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 th, td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 12px;
     text-align: left;
 }
 
 th {
-    background-color: #4caf50;
+    background-color: #1976D2; /* Primary color */
     color: #fff;
 }
 
+/* Add zebra striping to the table rows */
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Style for the editable class */
 .editable {
     cursor: pointer;
     text-decoration: underline;
     color: #007bff;
 }
+
+/* Hover effect on table rows */
+tr:hover {
+    background-color: #e0e0e0;
+}
+
+/* Make the table responsive */
+@media (max-width: 600px) {
+    table {
+        overflow-x: auto;
+    }
+}
+
 
 .modal {
     display: none;
@@ -703,7 +729,6 @@ th {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgb(0, 0, 0);
     background-color: rgba(0, 0, 0, 0.4);
     padding-top: 60px;
 }
@@ -722,14 +747,16 @@ th {
     float: right;
     font-size: 28px;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .close:hover,
 .close:focus {
-    color: #000;
+    color: black;
     text-decoration: none;
     cursor: pointer;
 }
+
 .return-item {
     border: 1px solid #ccc;
     padding: 10px;
@@ -743,7 +770,7 @@ th {
     background-color: #4CAF50;
     color: white;
     border: none;
-    padding: 8px 16px;
+    padding: 10px 16px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -755,19 +782,396 @@ th {
     background-color: #45a049;
 }
 
-/* Modal styles */
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
+/* Make the table responsive */
+@media (max-width: 600px) {
+    table {
+        overflow-x: auto;
+    }
 }
 
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
+
+
+.login-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  padding: 40px;
+  transform: translate(-50%, -50%);
+  background: rgba(0,0,0,.5);
+  box-sizing: border-box;
+  box-shadow: 0 15px 25px rgba(0,0,0,.6);
+  border-radius: 10px;
+}
+
+.login-box h2 {
+  margin: 0 0 30px;
+  padding: 0;
+  color: #fff;
+  text-align: center;
+}
+
+.login-box .user-box {
+  position: relative;
+}
+
+.login-box .user-box input {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 30px;
+  border: none;
+  border-bottom: 1px solid #fff;
+  outline: none;
+  background: transparent;
+}
+.login-box .user-box label {
+  position: absolute;
+  top:0;
+  left: 0;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #fff;
+  pointer-events: none;
+  transition: .5s;
+}
+
+.login-box .user-box input:focus ~ label,
+.login-box .user-box input:valid ~ label {
+  top: -20px;
+  left: 0;
+  color: #03e9f4;
+  font-size: 12px;
+}
+
+.login-box form a {
+  position: relative;
+  display: inline-block;
+  padding: 10px 20px;
+  color: #03e9f4;
+  font-size: 16px;
+  text-decoration: none;
+  text-transform: uppercase;
+  overflow: hidden;
+  transition: .5s;
+  margin-top: 40px;
+  letter-spacing: 4px
+}
+
+.login-box a:hover {
+  background: #03e9f4;
+  color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #03e9f4,
+              0 0 25px #03e9f4,
+              0 0 50px #03e9f4,
+              0 0 100px #03e9f4;
+}
+
+.login-box a span {
+  position: absolute;
+  display: block;
+}
+
+.login-box a span:nth-child(1) {
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #03e9f4);
+  animation: btn-anim1 1s linear infinite;
+}
+
+@keyframes btn-anim1 {
+  0% {
+    left: -100%;
+  }
+  50%,100% {
+    left: 100%;
+  }
+}
+
+.login-box a span:nth-child(2) {
+  top: -100%;
+  right: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(180deg, transparent, #03e9f4);
+  animation: btn-anim2 1s linear infinite;
+  animation-delay: .25s
+}
+
+@keyframes btn-anim2 {
+  0% {
+    top: -100%;
+  }
+  50%,100% {
+    top: 100%;
+  }
+}
+
+.login-box a span:nth-child(3) {
+  bottom: 0;
+  right: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(270deg, transparent, #03e9f4);
+  animation: btn-anim3 1s linear infinite;
+  animation-delay: .5s
+}
+
+@keyframes btn-anim3 {
+  0% {
+    right: -100%;
+  }
+  50%,100% {
+    right: 100%;
+  }
+}
+
+.login-box a span:nth-child(4) {
+  bottom: -100%;
+  left: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(360deg, transparent, #03e9f4);
+  animation: btn-anim4 1s linear infinite;
+  animation-delay: .75s
+}
+
+@keyframes btn-anim4 {
+  0% {
+    bottom: -100%;
+  }
+  50%,100% {
+    bottom: 100%;
+  }
+}
+
+/* Tablets (768px and below) */
+@media screen and (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+
+    .content {
+        width: calc(100% - 60px);
+        left: 200px;
+    }
+}
+
+/* Mobile devices (576px and below) */
+@media screen and (max-width: 576px) {
+    .content nav form .form-input input {
+        display: none;
+    }
+
+    .content nav form .form-input button {
+        width: auto;
+        height: auto;
+        background: transparent;
+        color: var(--dark);
+        border-radius: none;
+    }
+
+    .content nav form.show .form-input input {
+        display: block;
+        width: 100%;
+    }
+
+    .content nav form.show .form-input button {
+        width: 36px;
+        height: 100%;
+        color: var(--light);
+        background: var(--danger);
+        border-radius: 0 36px 36px 0;
+    }
+
+    .content nav form.show~.notif,
+    .content nav form.show~.profile {
+        display: none;
+    }
+
+    .content main .insights {
+        grid-template-columns: 1fr;
+    }
+
+    .content main .bottom-data .header {
+        min-width: 340px;
+    }
+
+    .content main .bottom-data .orders table {
+        min-width: 340px;
+    }
+
+    .content main .bottom-data .reminders .task-list {
+        min-width: 340px;
+    }
+}
+
+
+/* Style for the form */
+form {
+    margin-bottom: 20px;
+}
+
+/* Style for labels */
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: #363949; /* Dark color */
+}
+
+/* Style for text input */
+input[type="text"] {
+    width: calc(100% - 16px);
+    padding: 10px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Style for select (dropdown) */
+select {
+    width: calc(100% - 16px);
+    padding: 10px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    appearance: none; /* Remove default styling on some browsers */
+    background-image: url('data:image/svg+xml;utf8,<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z" /><path d="M0 0h24v24H0z" fill="none" /></svg>'); /* Add custom arrow icon */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+/* Style for the submit button */
+button {
+    background-color: #1976D2; /* Primary color */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    display: flex;
+}
+
+button:hover {
+    background-color: #1565C0; /* Darker shade of primary color on hover */
+}
+/* Style for the form */
+form {
+    margin-bottom: 20px;
+}
+
+/* Style for labels */
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: #363949; /* Dark color */
+}
+
+/* Style for text input */
+input[type="text"] {
+    width: calc(100% - 16px);
+    padding: 10px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Style for select (dropdown) */
+select {
+    width: calc(100% - 16px);
+    padding: 10px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    appearance: none; /* Remove default styling on some browsers */
+    background-image: url('data:image/svg+xml;utf8,<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z" /><path d="M0 0h24v24H0z" fill="none" /></svg>'); /* Add custom arrow icon */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+/* Style for the submit button */
+button {
+    background-color: #1976D2; /* Primary color */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #1565C0; /* Darker shade of primary color on hover */
+}
+
+/* Style for the table container */
+.table-container {
+    overflow-x: auto;
+    max-width: 100%; /* Ensure the table container doesn't overflow its parent */
+}
+
+/* Style for the table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #909ba4;
+    color: #fff;
+}
+
+.editable {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #007bff;
+}
+
+/* Make the table responsive */
+@media (max-width: 600px) {
+    table {
+        overflow-x: auto;
+    }
+}
+
+.content {
+    max-width: 80%;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+    margin-right: 15%;
+}
+canvas {
+    width: 100%;
+    height: auto;
 }

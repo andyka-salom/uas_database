@@ -22,7 +22,7 @@
                     <th>Subtotal</th>
                     <th>PPN</th>
                     <th>Margin Penjualan</th>
-                    <th>Total Nilai</th>
+                    <th>Total Hargai</th>
                 </tr>
             </thead>
             <tbody>
@@ -36,9 +36,9 @@
                         <td>{{ $salesDetail->harga_satuan }}</td>
                         <td>{{ $salesDetail->jumlah }}</td>
                         <td>{{ $salesDetail->subtotal }}</td>
-                        <td>{{ $salesDetail->ppn }}</td>
-                        <td>{{ $salesDetail->margin_penjualan }}</td>
-                        <td>{{ $salesDetail->total_nilai }}</td>
+                        <td>{{ $salesDetail->ppn }}%</td>
+                        <td>{{ $salesDetail->margin_penjualan }}%</td>
+                        <td> Rp {{ $salesDetail->total_nilai }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -119,62 +119,62 @@
 </div>
 
 <script>
-    function updateSubtotal() {
-        // Fetch quantity, ppn, and margin penjualan from the form
-        let quantity = document.getElementById('quantity').value;
-        let ppn = document.getElementById('ppn').value;
-        let marginPenjualanId = document.getElementById('marginPenjualan').value;
 
-        // Fetch hargaSatuan and margin from the selected option
-        let selectedOption = document.getElementById('idbarang').options[document.getElementById('idbarang').selectedIndex];
-        let hargaSatuan = selectedOption.getAttribute('data-harga');
-        let marginPenjualan = selectedOption.getAttribute('data-harga'); // Corrected attribute name
+function updateSubtotal() {
+            // Fetch quantity, ppn, and margin penjualan from the form
+            let quantity = document.getElementById('quantity').value;
+            let ppn = document.getElementById('ppn').value;
+            let marginPenjualanId = document.getElementById('marginPenjualan').value;
 
-        // Calculate subtotal, subtotalNilai, and totalNilai
-        let subtotal = quantity * hargaSatuan;
-        let subtotalNilai = subtotal + (subtotal * ppn / 100); // Corrected formula
-        let totalNilai = subtotalNilai + (subtotalNilai * marginPenjualan / 100);
+            // Fetch hargaSatuan from the selected option
+            let selectedOption = document.getElementById('idbarang').options[document.getElementById('idbarang').selectedIndex];
+            let hargaSatuan = selectedOption.getAttribute('data-harga');
 
-        // Set the calculated values in the form
-        document.getElementById('subtotal').value = subtotal;
-        document.getElementById('subtotalNilai').value = subtotalNilai;
-        document.getElementById('totalNilai').value = totalNilai;
+            // Calculate subtotal, subtotalNilai, and totalNilai
+            let subtotal = hargaSatuan * quantity;
+            let subtotalNilai = subtotal + (subtotal * ppn / 100);
+            let totalNilai = subtotalNilai + (subtotalNilai * marginPenjualanId / 100);
 
-        // Set the selected margin penjualan in the form
-        document.getElementById('marginPenjualan').value = marginPenjualanId;
-    }
+            // Set the calculated values in the form
+            document.getElementById('subtotal').value = subtotal;
+            document.getElementById('subtotalNilai').value = subtotalNilai;
+            document.getElementById('totalNilai').value = totalNilai;
 
-    // Automatically call the function on page load
-    document.addEventListener('DOMContentLoaded', function () {
-        updateSubtotal();
-    });
+            // Set the selected margin penjualan in the form
+            document.getElementById('marginPenjualan').value = marginPenjualanId;
+        }
 
-    // Rest of your existing script
-    document.getElementById('tambahPenjualanForm').addEventListener('submit', function (event) {
-        event.preventDefault();
+        // Automatically call the function on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            updateSubtotal();
+        });
 
-        // Fetch quantity, ppn, and margin penjualan from the form
-        let quantity = document.getElementById('quantity').value;
-        let ppn = document.getElementById('ppn').value;
-        let marginPenjualanId = document.getElementById('marginPenjualan').value;
+        // Rest of your existing script
+        document.getElementById('tambahPenjualanForm').addEventListener('submit', function (event) {
+            event.preventDefault();
 
-        // Fetch hargaSatuan from the selected option
-        let selectedOption = document.getElementById('idbarang').options[document.getElementById('idbarang').selectedIndex];
-        let hargaSatuan = selectedOption.getAttribute('data-harga');
+            // Fetch quantity, ppn, and margin penjualan from the form
+            let quantity = document.getElementById('quantity').value;
+            let ppn = document.getElementById('ppn').value;
+            let marginPenjualanId = document.getElementById('marginPenjualan').value;
 
-        // Calculate subtotal, subtotalNilai, and totalNilai
-        let subtotal = quantity * hargaSatuan;
-        let subtotalNilai = subtotal + (subtotal * ppn / 100); // Corrected formula
-        let totalNilai = subtotalNilai + (subtotalNilai * marginPenjualan / 100);
+            // Fetch hargaSatuan from the selected option
+            let selectedOption = document.getElementById('idbarang').options[document.getElementById('idbarang').selectedIndex];
+            let hargaSatuan = selectedOption.getAttribute('data-harga');
 
-        // Set the calculated values in the form
-        document.getElementById('subtotal').value = subtotal;
-        document.getElementById('subtotalNilai').value = subtotalNilai;
-        document.getElementById('totalNilai').value = totalNilai;
+            // Calculate subtotal, subtotalNilai, and totalNilai
+            let subtotal = hargaSatuan * quantity;
+            let subtotalNilai = subtotal + (subtotal * ppn / 100);
+            let totalNilai = subtotalNilai + (subtotal * marginPenjualanId / 100);
 
-        // Submit the form
-        this.submit();
-    });
+            // Set the calculated values in the form
+            document.getElementById('subtotal').value = subtotal;
+            document.getElementById('subtotalNilai').value = subtotalNilai;
+            document.getElementById('totalNilai').value = totalNilai;
+
+            // Submit the form
+            this.submit();
+        });
 </script>
 
 @endsection

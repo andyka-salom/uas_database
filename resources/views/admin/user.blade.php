@@ -5,23 +5,32 @@
     <div class="bottom-data"> 
         <h1>Users</h1>
 
-        <!-- Add User Form -->
-        <form id="addUserForm" method="POST" action="{{ route('users.store') }}">
-            @csrf
-            <label for="add_username">Add Username:</label>
-            <input type="text" id="add_username" name="username" required>
-            <label for="add_password">Add Password:</label>
-            <input type="password" id="add_password" name="password" required>
-            <label for="add_email">Add Email:</label>
-            <input type="email" id="add_email" name="email" required>
-            <label for="add_role">Select Role:</label>
-            <select id="add_role" name="idrole" required>
-                @foreach($roles as $role)
-                    <option value="{{ $role->id_role }}">{{ $role->nama_role }}</option>
-                @endforeach
-            </select>
-            <button type="submit">Add</button>
-        </form>
+         <!-- Add User Button -->
+         <button id="openAddUserModalBtn">Add User</button>
+
+<!-- Add User Modal -->
+            <div id="addUserModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" id="closeAddUserModal">&times;</span>
+                    <!-- Add User Form -->
+                    <form id="addUserForm" method="POST" action="{{ route('users.store') }}">
+                        @csrf
+                        <label for="add_username">Add Username:</label>
+                        <input type="text" id="add_username" name="username" required>
+                        <label for="add_password">Add Password:</label>
+                        <input type="password" id="add_password" name="password" required>
+                        <label for="add_email">Add Email:</label>
+                        <input type="email" id="add_email" name="email" required>
+                        <label for="add_role">Select Role:</label>
+                        <select id="add_role" name="idrole" required>
+                            @foreach($roles as $role)
+                                <option value="{{ $role->id_role }}">{{ $role->nama_role }}</option>
+                            @endforeach
+                        </select>
+                        <button type="submit">Add</button>
+                    </form>
+                </div>
+            </div>
 
         <table id="user-table">
             <thead>
@@ -90,6 +99,24 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        const addUserModal = document.getElementById('addUserModal');
+        const openAddUserModalBtn = document.getElementById('openAddUserModalBtn');
+        const closeAddUserModal = document.getElementById('closeAddUserModal');
+
+        openAddUserModalBtn.addEventListener('click', function () {
+            addUserModal.style.display = 'block';
+        });
+
+        closeAddUserModal.addEventListener('click', function () {
+            addUserModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function (event) {
+            if (event.target === addUserModal) {
+                addUserModal.style.display = 'none';
+            }
+        });
+
         const userTable = document.getElementById('user-table');
         const addUserForm = document.getElementById('addUserForm');
         const editUserModal = document.getElementById('editUserModal');

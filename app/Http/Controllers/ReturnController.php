@@ -9,25 +9,25 @@ class ReturnController extends Controller
 {
     public function index()
     {
-        // Fetch returns data using the ViewReturnDetails view
+      
         $retur = DB::select("SELECT * FROM ViewReturnDetails");
-
-        return view('kasir.return', compact('retur'));
+        $penerimaans = DB::table('penerimaan')->get();
+        $users = DB::table('users')->get();
+        $barangs = DB::table('barang')->get();
+        return view('kasir.return', compact('retur','users','barangs','penerimaans'));
     }
 
     public function addReturn(Request $request)
     {
         $userId = Auth::id();
-        // Validate the incoming request data
+     
         $request->validate([
             'penerimaan_id' => 'required|integer',
-           
             'barang_id' => 'required|integer',
             'jumlah' => 'required|integer',
             'alasan' => 'required|string|max:200',
         ]);
 
-        // Call the stored procedure to add return
         DB::select('CALL tambah_retur(?, ?, ?, ?, ?)', [
             $request->input('penerimaan_id'),
             $userId,

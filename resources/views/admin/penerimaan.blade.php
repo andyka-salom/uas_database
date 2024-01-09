@@ -55,8 +55,16 @@
                         @csrf
                         <div class="form-group">
                             <label for="idpengadaan">ID Pengadaan</label>
-                            <input type="text" class="form-control" id="idpengadaan" name="idpengadaan" required>
+                            <select class="form-control" id="idpengadaan" name="idpengadaan" required>
+                                @foreach($pengadaans as $pengadaan)
+                                    <option value="{{ $pengadaan->id_pengadaan }}">
+                                        {{ $pengadaan->id_pengadaan }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
+
+                                
                         <div class="form-group">
                             <label for="status">Status</label>
                             <input type="text" class="form-control" id="status" name="status" required>
@@ -64,8 +72,15 @@
                       
                         <div class="form-group">
                             <label for="barang_idbarang">Barang ID</label>
-                            <input type="text" class="form-control" id="barang_idbarang" name="barang_idbarang" required>
+                            <select class="form-control" id="barang_idbarang" name="barang_idbarang" required>
+                                @foreach($barangs as $barang)
+                                    <option value="{{ $barang->id_barang }}">
+                                        {{ $barang->nama }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
+
                         <div class="form-group">
                             <label for="jumlah_terima">Jumlah Terima</label>
                             <input type="text" class="form-control" id="jumlah_terima" name="jumlah_terima" required>

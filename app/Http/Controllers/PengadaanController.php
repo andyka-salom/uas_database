@@ -2,7 +2,7 @@
 // app/Http/Controllers/PengadaanController.php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -33,9 +33,10 @@ class PengadaanController extends Controller
  
 public function createPengadaan(Request $request)
 {
+    $userId = Auth::id();
     $pengadaanId = DB::table('pengadaan')->insertGetId([
         'TIMESTAMP' => now(),
-        'user_id' => $request->input('user_id_user'),
+        'user_id' =>  $userId,
         'vendor_idvendor' => $request->input('vendor_idvendor'),
         'subtotal_nilai' => $request->input('sub_total'),
         'ppn' => $request->input('ppn'),

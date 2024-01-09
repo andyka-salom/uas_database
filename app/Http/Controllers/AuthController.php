@@ -43,9 +43,9 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             if ($user->idrole === 1) { 
-                return redirect()->route('roles.index')->with('success', 'Login berhasil.');
+                return redirect()->route('admin.index')->with('success', 'Login berhasil.');
             } elseif ($user->idrole === 2) { 
-                return redirect()->route('pengadaan.index')->with('success', 'Berhasil Login');
+                return redirect()->route('pemesanan.index')->with('success', 'Berhasil Login');
             }
         }
 

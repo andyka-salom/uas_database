@@ -46,18 +46,39 @@
                 <div class="modal-body">
                     <!-- Form to Add Return -->
                     <form id="addReturnForm">
-                        <div class="form-group">
-                            <label for="penerimaan_id">Penerimaan ID</label>
-                            <input type="text" class="form-control" id="penerimaan_id" name="penerimaan_id" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="user_id">User ID</label>
-                            <input type="text" class="form-control" id="user_id" name="user_id" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="barang_id">Product ID</label>
-                            <input type="text" class="form-control" id="barang_id" name="barang_id" required>
-                        </div>
+                    <div class="form-group">
+                        <label for="penerimaan_id">Penerimaan ID</label>
+                        <select class="form-control" id="penerimaan_id" name="penerimaan_id" required>
+                            @foreach($penerimaans as $penerimaan)
+                                <option value="{{ $penerimaan->idpenerimaan }}">
+                                    {{ $penerimaan->idpenerimaan}}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="user_id">User ID</label>
+                        <select class="form-control" id="user_id" name="user_id" required>
+                            @foreach($users as $user)
+                                <option value="{{ $user->id }}">
+                                    {{ $user->id }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="barang_id">Product ID</label>
+                        <select class="form-control" id="barang_id" name="barang_id" required>
+                            @foreach($barangs as $barang)
+                                <option value="{{ $barang->id_barang }}">
+                                    {{ $barang->id_barang }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
                         <div class="form-group">
                             <label for="jumlah">Quantity</label>
                             <input type="text" class="form-control" id="jumlah" name="jumlah" required>

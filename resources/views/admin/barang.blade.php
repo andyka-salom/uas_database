@@ -5,23 +5,32 @@
     <div class="bottom-data"> 
         <h1>Items</h1>
 
-        <!-- Add Item Form -->
-        <form id="addItemForm" method="POST" action="{{ route('items.store') }}">
-            @csrf
-            <label for="add_jenis">Add Item Type:</label>
-            <input type="text" id="add_jenis" name="jenis" required>
-            <label for="add_nama">Add Item Name:</label>
-            <input type="text" id="add_nama" name="nama" required>
-            <label for="add_id_satuan">Select Unit:</label>
-            <select id="add_id_satuan" name="id_satuan" required>
-                @foreach($units as $unit)
-                    <option value="{{ $unit->id_satuan }}">{{ $unit->nama_satuan }}</option>
-                @endforeach
-            </select>
-            <label for="add_harga">Add Item Price:</label>
-            <input type="number" id="add_harga" name="harga" required>
-            <button type="submit">Add</button>
-        </form>
+        <!-- Add Item Button -->
+        <button id="openAddItemModalBtn">Add Item</button>
+
+        <!-- Add Item Modal -->
+        <div id="addItemModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeAddItemModal">&times;</span>
+                <!-- Add Item Form -->
+                <form id="addItemForm" method="POST" action="{{ route('items.store') }}">
+                    @csrf
+                    <label for="add_jenis">Add Item Type:</label>
+                    <input type="text" id="add_jenis" name="jenis" required>
+                    <label for="add_nama">Add Item Name:</label>
+                    <input type="text" id="add_nama" name="nama" required>
+                    <label for="add_id_satuan">Select Unit:</label>
+                    <select id="add_id_satuan" name="id_satuan" required>
+                        @foreach($units as $unit)
+                            <option value="{{ $unit->id_satuan }}">{{ $unit->nama_satuan }}</option>
+                        @endforeach
+                    </select>
+                    <label for="add_harga">Add Item Price:</label>
+                    <input type="number" id="add_harga" name="harga" required>
+                    <button type="submit">Add</button>
+                </form>
+            </div>
+        </div>
 
         <table id="item-table">
             <thead>
@@ -94,6 +103,24 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        const addItemModal = document.getElementById('addItemModal');
+        const openAddItemModalBtn = document.getElementById('openAddItemModalBtn');
+        const closeAddItemModal = document.getElementById('closeAddItemModal');
+
+        openAddItemModalBtn.addEventListener('click', function () {
+            addItemModal.style.display = 'block';
+        });
+
+        closeAddItemModal.addEventListener('click', function () {
+            addItemModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function (event) {
+            if (event.target === addItemModal) {
+                addItemModal.style.display = 'none';
+            }
+        });
+
         const itemTable = document.getElementById('item-table');
         const addItemForm = document.getElementById('addItemForm');
         const editItemModal = document.getElementById('editItemModal');
@@ -141,4 +168,5 @@
         });
     });
 </script>
+
 @endsection

@@ -10,10 +10,10 @@ class PenerimaanController extends Controller
 {
     public function index()
     {
-        // Fetch data from the view
+        $pengadaans = DB::table('pengadaan')->get();
         $penerimaanDetails = DB::select("SELECT * FROM penerimaan_details");
-
-        return view('admin.penerimaan', compact('penerimaanDetails'));
+        $barangs = DB::table('barang')->get();
+        return view('admin.penerimaan', compact('penerimaanDetails','pengadaans','barangs'));
     }
 
     public function tambahPenerimaan(Request $request)

@@ -34,9 +34,9 @@ class PemesananController extends Controller
         $hargaSatuan = $barang->harga;
 
         // Calculate subtotal, subtotalNilai, and totalNilai
-        $subtotal = $quantity * $hargaSatuan;
-        $subtotalNilai = $subtotal * ($ppn / 100);
-        $totalNilai = $subtotalNilai + ($subtotalNilai * $marginPenjualan / 100);
+        $subtotal = $request->input('subtotal');
+        $subtotalNilai = $request->input('subtotalNilai');
+        $totalNilai = $request->input('totalNilai');
 
         // Call the stored procedure to insert data into penjualan and detail_penjualan tables
         DB::select('CALL tambah_penjualan(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [

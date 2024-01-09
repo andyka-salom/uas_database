@@ -14,7 +14,8 @@ class ItemController extends Controller
             ->select('barang.*', 'satuan.nama_satuan as satuan_name')
             ->get();
 
-        $units = DB::table('satuan')->get();
+            $units = DB::table('satuan')->where('status', true)->get();
+
 
         return view('admin.barang', compact('items', 'units'));
     }
